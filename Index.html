@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Inventario de Insumos</title>
+
+    <link rel="stylesheet" href="Style.css">
+</head>
+
+<body>
+
+    <!-- MENÚ LATERAL -->
+    <aside class="sidebar">
+
+        <div class="logo">
+            📦
+            <div>
+                <h2>Inventario</h2>
+                <span>Control de insumos</span>
+            </div>
+        </div>
+
+        <nav>
+
+            <button onclick="mostrarSeccion('inicio')">
+                🏠 Inicio
+            </button>
+
+            <button onclick="mostrarSeccion('insumos')">
+                📦 Insumos
+            </button>
+
+            <button onclick="mostrarSeccion('entradas')">
+                📥 Entradas
+            </button>
+
+            <button onclick="mostrarSeccion('salidas')">
+                📤 Salidas
+            </button>
+
+            <button onclick="mostrarSeccion('movimientos')">
+                📋 Movimientos
+            </button>
+
+        </nav>
+
+    </aside>
+
+
+    <!-- CONTENIDO PRINCIPAL -->
+    <main class="contenido">
+
+        <header>
+
+            <div>
+                <h1 id="tituloPagina">
+                    Dashboard
+                </h1>
+
+                <p>
+                    Sistema de inventario de insumos
+                </p>
+            </div>
+
+            <div id="fecha"></div>
+
+        </header>
+
+
+        <!-- ================= INICIO ================= -->
+
+        <section id="inicio" class="seccion">
+
+            <div class="tarjetas">
+
+                <div class="tarjeta">
+                    <span>📦</span>
+
+                    <div>
+                        <p>Total de insumos</p>
+                        <h2 id="totalInsumos">0</h2>
+                    </div>
+                </div>
+
+
+                <div class="tarjeta">
+                    <span>📊</span>
+
+                    <div>
+                        <p>Unidades disponibles</p>
+                        <h2 id="totalStock">0</h2>
+                    </div>
+                </div>
+
+
+                <div class="tarjeta">
+                    <span>📥</span>
+
+                    <div>
+                        <p>Entradas</p>
+                        <h2 id="totalEntradas">0</h2>
+                    </div>
+                </div>
+
+
+                <div class="tarjeta">
+                    <span>📤</span>
+
+                    <div>
+                        <p>Salidas</p>
+                        <h2 id="totalSalidas">0</h2>
+                    </div>
+                </div>
+
+            </div>
+
+
+            <div class="panel">
+
+                <div class="panel-titulo">
+                    <h2>⚠️ Insumos agotados</h2>
+                    <button class="btn-secundario" onclick="exportarPDF('inicio')">📄 PDF</button>
+                </div>
+
+                <div id="listaStockBajo"></div>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- ================= INSUMOS ================= -->
+
+        <section id="insumos" class="seccion oculto">
+
+            <div class="encabezado-seccion">
+
+                <div>
+                    <h2>Insumos</h2>
+
+                    <p>
+                        Catálogo de insumos disponibles.
+                    </p>
+                </div>
+
+                <button class="btn-principal"
+                        onclick="abrirFormularioInsumo()">
+
+                    + Nuevo insumo
+
+                </button>
+
+                <div class="botones-exportacion">
+                    <button class="btn-secundario" onclick="exportarPDF('insumos')">📄 PDF</button>
+                    <button class="btn-secundario" onclick="exportarExcel()">📊 Excel</button>
+                </div>
+
+            </div>
+
+
+            <input
+                type="text"
+                id="buscar"
+                placeholder="🔍 Buscar insumo..."
+                onkeyup="mostrarInsumos()"
+            >
+
+
+            <div class="panel">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+
+                            <th>Código</th>
+                            <th>Insumo</th>
+                            <th>Categoría</th>
+                            <th>Unidad</th>
+                            <th>Stock</th>
+                            <th>Estado</th>
+
+                        </tr>
+
+                    </thead>
+
+                    <tbody id="tablaInsumos"></tbody>
+
+                </table>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- ================= ENTRADAS ================= -->
+
+        <section id="entradas" class="seccion oculto">
+
+            <div class="encabezado-seccion">
+
+                <div>
+
+                    <h2>Entradas</h2>
+
+                    <p>
+                        Registra los insumos que ingresan.
+                    </p>
+
+                </div>
+
+                <button
+                    class="btn-principal"
+                    onclick="abrirEntrada()">
+
+                    + Registrar entrada
+
+                </button>
+
+                <button class="btn-secundario" onclick="exportarPDF('entradas')">📄 PDF</button>
+
+            </div>
+
+
+            <div class="panel">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+
+                            <th>Fecha</th>
+                            <th>Referencia</th>
+                            <th>Insumo</th>
+                            <th>Cantidad</th>
+                            <th>Proveedor</th>
+                            <th>Recibido por</th>
+
+                        </tr>
+
+                    </thead>
+
+                    <tbody id="tablaEntradas"></tbody>
+
+                </table>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- ================= SALIDAS ================= -->
+
+        <section id="salidas" class="seccion oculto">
+
+            <div class="encabezado-seccion">
+
+                <div>
+
+                    <h2>Salidas</h2>
+
+                    <p>
+                        Registra los insumos utilizados.
+                    </p>
+
+                </div>
+
+                <button
+                    class="btn-principal"
+                    onclick="abrirSalida()">
+
+                    + Registrar salida
+
+                </button>
+
+                <button class="btn-secundario" onclick="exportarPDF('salidas')">📄 PDF</button>
+
+            </div>
+
+
+            <div class="panel">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+
+                            <th>Fecha</th>
+                            <th>Referencia</th>
+                            <th>Insumo</th>
+                            <th>Cantidad</th>
+                            <th>Área</th>
+                            <th>Solicitado por</th>
+                            <th>Entregado por</th>
+
+                        </tr>
+
+                    </thead>
+
+                    <tbody id="tablaSalidas"></tbody>
+
+                </table>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- ================= MOVIMIENTOS ================= -->
+
+        <section id="movimientos" class="seccion oculto">
+
+            <div class="encabezado-seccion">
+
+                <div>
+
+                    <h2>Historial de movimientos</h2>
+
+                    <p>
+                        Entradas y salidas del inventario.
+                    </p>
+
+                </div>
+
+                <button class="btn-secundario" onclick="exportarPDF('movimientos')">📄 PDF</button>
+
+            </div>
+
+
+            <div class="panel">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+
+                            <th>Fecha</th>
+                            <th>Tipo</th>
+                            <th>Insumo</th>
+                            <th>Cantidad</th>
+                            <th>Responsable</th>
+
+                        </tr>
+
+                    </thead>
+
+                    <tbody id="tablaMovimientos"></tbody>
+
+                </table>
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+
+    <!-- ================= MODAL ================= -->
+
+    <div id="modal" class="modal oculto">
+
+        <div class="modal-contenido">
+
+            <button
+                class="cerrar"
+                onclick="cerrarModal()">
+
+                ✕
+
+            </button>
+
+            <h2 id="tituloModal">
+                Nuevo registro
+            </h2>
+
+            <form id="formulario"></form>
+
+        </div>
+
+    </div>
+
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <script src="Inventario.js"></script>
+
+</body>
+
+</html>
